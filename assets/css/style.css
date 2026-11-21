@@ -1,0 +1,656 @@
+/* ==========================================================================
+   Sunflower Wedding Invitation & Digital Experience
+   Design Inspired by Sarhlwar Digital E-Invitation
+   ========================================================================== */
+
+:root {
+  --primary-gold: #c99e32;
+  --gold-gradient: linear-gradient(135deg, #dfba53 0%, #b8860b 50%, #996515 100%);
+  --wax-gold: #c69214;
+  --wax-shadow: rgba(145, 102, 12, 0.45);
+  --sunflower-yellow: #f5a623;
+  --sunflower-dark: #6e471b;
+  --cream-bg: #fdfaf5;
+  --card-bg: #fffefb;
+  --sage-green: #60725c;
+  --text-dark: #2c251e;
+  --text-muted: #6e6459;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Lora', 'Padauk', serif;
+  background-color: #f7f3eb;
+  color: var(--text-dark);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f7f3eb;
+}
+::-webkit-scrollbar-thumb {
+  background: #dfba53;
+  border-radius: 3px;
+}
+
+/* Fonts */
+.font-script {
+  font-family: 'Great Vibes', 'Pinyon Script', cursive;
+}
+.font-serif-luxury {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+}
+.font-sans-clean {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+}
+.font-burmese {
+  font-family: 'Padauk', sans-serif;
+}
+
+/* ==========================================================================
+   ENVELOPE OPENING OVERLAY
+   ========================================================================== */
+#envelope-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #f7f3eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  perspective: 1200px;
+  overflow: hidden;
+}
+
+#envelope-screen.opened {
+  opacity: 0;
+  pointer-events: none;
+  display: none !important;
+}
+
+/* Floating background sunflower watercolor illustrations in envelope screen */
+.envelope-floral-bg {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.envelope-floral-top-left {
+  top: -30px;
+  left: -30px;
+  width: 240px;
+  transform: rotate(-15deg);
+}
+
+.envelope-floral-bottom-right {
+  bottom: -30px;
+  right: -30px;
+  width: 240px;
+  transform: rotate(165deg);
+}
+
+/* The Envelope Container */
+.envelope-wrapper {
+  position: relative;
+  width: 330px;
+  height: 440px;
+  max-width: 90vw;
+  max-height: 75vh;
+  cursor: pointer;
+  filter: drop-shadow(0 25px 35px rgba(110, 71, 27, 0.22));
+  transition: transform 0.4s ease;
+}
+
+@media (min-width: 640px) {
+  .envelope-wrapper {
+    width: 360px;
+    height: 480px;
+  }
+}
+
+.envelope-wrapper:hover {
+  transform: translateY(-4px);
+}
+
+/* Envelope Body */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  background: #f6efe0;
+  border-radius: 12px;
+  border: 1px solid rgba(201, 158, 50, 0.4);
+  box-shadow: 
+    inset 0 0 35px rgba(223, 186, 83, 0.15),
+    0 10px 25px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 5;
+}
+
+/* Front triangular pocket fold */
+.envelope-front-pocket {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 250px;
+  background: linear-gradient(180deg, #f2e7d3 0%, #eaddc4 100%);
+  clip-path: polygon(0 40%, 50% 0%, 100% 40%, 100% 100%, 0 100%);
+  z-index: 6;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Top flap triangular / perspective */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(180deg, #ede0c7 0%, #dfcfb0 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.envelope-wrapper.opening .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+/* Inner Letter Card */
+.envelope-letter {
+  position: absolute;
+  top: 30px;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1e6cd;
+  transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+  z-index: 2;
+  opacity: 0;
+}
+
+.envelope-wrapper.opening .envelope-letter {
+  opacity: 1;
+  transform: translateY(-90px);
+}
+
+/* Golden Wax Seal */
+.wax-seal {
+  position: absolute;
+  top: 185px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffd978, #c69214 60%, #875e07 100%);
+  box-shadow: 
+    0 8px 22px rgba(110, 71, 27, 0.45),
+    inset 0 2px 4px rgba(255, 255, 255, 0.6),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+  user-select: none;
+}
+
+.wax-seal::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 230, 140, 0.55);
+}
+
+.wax-seal-rim {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 65%, rgba(135, 94, 7, 0.35) 100%);
+  pointer-events: none;
+}
+
+.wax-seal-text {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #563900;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4), 0 -1px 1px rgba(0, 0, 0, 0.4);
+}
+
+.wax-seal:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 12px 28px rgba(110, 71, 27, 0.5);
+}
+
+.envelope-wrapper.opening .wax-seal {
+  transform: translate(-50%, -50%) scale(1.3);
+  opacity: 0;
+}
+
+/* Pulsing Badge for Tap to Open */
+.tap-to-open-pill {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 9px 22px;
+  border-radius: 30px;
+  border: 1px solid rgba(223, 186, 83, 0.55);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #7b591b;
+  animation: pulse-soft 2.2s infinite ease-in-out;
+  z-index: 25;
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 10px 24px rgba(223, 186, 83, 0.35);
+  }
+}
+
+/* ==========================================================================
+   FLOATING MUSIC PLAYER
+   ========================================================================== */
+#floating-music-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(223, 186, 83, 0.5);
+  padding: 8px 14px 8px 10px;
+  border-radius: 40px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#floating-music-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 12px 30px rgba(223, 186, 83, 0.35);
+}
+
+.vinyl-disc {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e5a93c 25%, #2a221a 26%, #1a1510 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.vinyl-disc::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f7f3eb;
+}
+
+.vinyl-spin {
+  animation: spin-disc 4s linear infinite;
+}
+
+.vinyl-paused {
+  animation-play-state: paused;
+}
+
+@keyframes spin-disc {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.sound-waves {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.wave-bar {
+  width: 2.5px;
+  background: #c99e32;
+  border-radius: 2px;
+  height: 4px;
+  transition: height 0.2s;
+}
+
+.playing .wave-bar:nth-child(1) { animation: wave 1.2s infinite ease-in-out; }
+.playing .wave-bar:nth-child(2) { animation: wave 0.8s infinite ease-in-out 0.2s; }
+.playing .wave-bar:nth-child(3) { animation: wave 1.4s infinite ease-in-out 0.4s; }
+.playing .wave-bar:nth-child(4) { animation: wave 1.0s infinite ease-in-out 0.1s; }
+
+@keyframes wave {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+
+/* ==========================================================================
+   SUNFLOWER PETALS BACKGROUND EFFECT
+   ========================================================================== */
+#petals-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ==========================================================================
+   HANGING POLAROID GALLERY
+   ========================================================================== */
+.clothesline-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 35px;
+  padding-bottom: 25px;
+}
+
+.clothesline-wire {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #b38b4d 15%, #b38b4d 85%, transparent 100%);
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 5;
+}
+
+.polaroid-card {
+  background: #ffffff;
+  padding: 10px 10px 28px 10px;
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+  cursor: pointer;
+  position: relative;
+  transform-origin: top center;
+}
+
+.polaroid-card:hover {
+  transform: translateY(6px) scale(1.03) rotate(0deg) !important;
+  box-shadow: 0 18px 35px rgba(110, 71, 27, 0.22);
+  z-index: 20 !important;
+}
+
+.wooden-peg {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.peg-sunflower {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+}
+
+.polaroid-caption {
+  font-family: 'Great Vibes', cursive;
+  font-size: 20px;
+  color: #5c4728;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   SUNFLOWER FORTUNE GAME ("LOVES ME, LOVES ME NOT")
+   ========================================================================== */
+.fortune-game-card {
+  background: #fffcf5;
+  border-radius: 24px;
+  border: 1px solid rgba(223, 186, 83, 0.35);
+  box-shadow: 0 15px 40px rgba(110, 71, 27, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.sunflower-svg-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+.sunflower-petal {
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  transform-origin: 140px 140px;
+}
+
+.sunflower-petal:hover {
+  filter: brightness(1.1) drop-shadow(0 2px 6px rgba(245, 166, 35, 0.6));
+}
+
+.petal-plucked {
+  pointer-events: none;
+  animation: fall-and-spin 1.2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes fall-and-spin {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(var(--dx, 20px), 80px) rotate(45deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(var(--dx, 40px), 240px) rotate(120deg);
+    opacity: 0;
+  }
+}
+
+.bee-flying {
+  animation: bee-buzz 3s infinite ease-in-out alternate;
+}
+
+@keyframes bee-buzz {
+  0% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate(15px, -12px) rotate(6deg);
+  }
+  100% {
+    transform: translate(-10px, 8px) rotate(-2deg);
+  }
+}
+
+/* ==========================================================================
+   CALENDAR STYLES
+   ========================================================================== */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  text-align: center;
+}
+
+.calendar-day-header {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8c7657;
+  padding: 6px 0;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #4a3e30;
+  border-radius: 50%;
+  position: relative;
+}
+
+.calendar-cell.wedding-day {
+  color: #fff;
+  font-weight: 700;
+  background: var(--gold-gradient);
+  box-shadow: 0 4px 12px rgba(201, 158, 50, 0.45);
+}
+
+.wedding-heart-circle {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  animation: pulse-ring 2.4s infinite ease-in-out;
+}
+
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.15); opacity: 0.4; }
+}
+
+/* ==========================================================================
+   DRESS CODE SWATCHES
+   ========================================================================== */
+.color-swatch-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  border: 3px solid #ffffff;
+  transition: transform 0.3s;
+}
+
+.color-swatch-circle:hover {
+  transform: scale(1.15);
+}
+
+/* ==========================================================================
+   MODAL & TOAST
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 37, 30, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #fffcf7;
+  border-radius: 20px;
+  border: 1px solid rgba(223, 186, 83, 0.4);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+/* Toast */
+#toast-notification {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: rgba(44, 37, 30, 0.92);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 11000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#toast-notification.show {
+  transform: translateX(-50%) translateY(0);
+}
