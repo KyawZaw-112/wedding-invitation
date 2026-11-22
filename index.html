@@ -109,7 +109,6 @@
 
   <!-- Background Music Audio Element -->
   <audio id="wedding-audio" src="assets/audio/perfect.mp3" preload="auto" loop></audio>
-
   <!-- =========================================================================
        2. FLOATING BACKGROUND MUSIC PLAYER (As featured in the Facebook Reel)
        ========================================================================= -->
@@ -799,8 +798,9 @@
   <script src="assets/js/main.js"></script>
   <script>
     (function () {
-      var VERSE_START = 25;  // 0:25 ကနေ စမယ်
+      var VERSE_START = 21;  // 0:25 ကနေ စမယ်
       var VERSE_END   = 0;   // 0 = သီချင်းအဆုံးထိ
+
 
       var audio = document.getElementById('wedding-audio');
       if (!audio || !(VERSE_START > 0 || VERSE_END > VERSE_START)) return;
