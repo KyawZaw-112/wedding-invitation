@@ -797,5 +797,39 @@
 
   <!-- Main JavaScript File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    (function () {
+      var VERSE_START = 25;  // 0:25 ကနေ စမယ်
+      var VERSE_END   = 0;   // 0 = သီချင်းအဆုံးထိ
+
+      var audio = document.getElementById('wedding-audio');
+      if (!audio || !(VERSE_START > 0 || VERSE_END > VERSE_START)) return;
+
+      var hasEnd = VERSE_END > VERSE_START;
+      audio.loop = false;    // 0:00 ကို မပြန်ဘဲ VERSE_START ကို ပြန်ခုန်ဖို့
+
+      function toStart() {
+        try { audio.currentTime = VERSE_START; } catch (e) {}
+      }
+
+      audio.addEventListener('loadedmetadata', toStart);
+      if (audio.readyState >= 1) toStart();
+      audio.addEventListener('play', function () {
+        if (audio.currentTime < VERSE_START || (hasEnd && audio.currentTime >= VERSE_END)) toStart();
+      });
+
+      audio.addEventListener('ended', function () {   // သီချင်းဆုံးရင် 0:25 ပြန်ခုန်
+        toStart();
+        var p = audio.play();
+        if (p && p.catch) p.catch(function () {});
+      });
+
+      if (hasEnd) {                                    // VERSE_END ထားမှ အလုပ်လုပ်
+        setInterval(function () {
+          if (!audio.paused && audio.currentTime >= VERSE_END) toStart();
+        }, 50);
+      }
+    })();
+  </script>
 </body>
 </html>
